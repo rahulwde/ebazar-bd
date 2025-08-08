@@ -1,28 +1,45 @@
 import { Link, NavLink } from "react-router";
-import { useState } from "react";
+import { use, useState } from "react";
 import { BsCart4 } from "react-icons/bs";
- const Navbar = () => {
+import { AuthContext } from "../Context/Authcontext";
+
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logOut } = use(AuthContext);
 
   const navLinks = [
     { path: "/", name: "Home" },
     { path: "/products", name: "Products" },
-    { path: "/create", name: "create" },
+    { path: "/create", name: "Create" },
     { path: "/contact", name: "Contact" },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <nav className="shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-           <Link to="/" className="flex items-center gap-2 text-[#0066ff]  transition duration-300">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-[#0066ff] transition duration-300"
+        >
           <BsCart4 size={28} />
           <div className="leading-5 text-left font-bold text-[18px]">
             <span className="text-black">Digital</span>
             <br />
-            <span>Bazar <span className="text-[#00aa55]">BD</span></span>
+            <span>
+              Bazar <span className="text-[#00aa55]">BD</span>
+            </span>
           </div>
         </Link>
+
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6">
           {navLinks.map((link) => (
@@ -39,13 +56,21 @@ import { BsCart4 } from "react-icons/bs";
             </NavLink>
           ))}
 
-          {/* Auth buttons (optional) */}
-          <Link
-            to="/login"
-            className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-          >
-            Login
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -96,13 +121,25 @@ import { BsCart4 } from "react-icons/bs";
             </NavLink>
           ))}
 
-          <Link
-            to="/login"
-            className="block bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 mt-2"
-            onClick={() => setIsOpen(false)}
-          >
-            Login
-          </Link>
+          {user ? (
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="block bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 mt-2"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="block bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 mt-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Login
+            </Link>
+          )}
         </div>
       )}
     </nav>

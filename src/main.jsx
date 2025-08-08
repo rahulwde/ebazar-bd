@@ -11,7 +11,11 @@ import Home from './mainLayout/Home.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/SignUp.jsx';
 import CreateProductForm from './components/CreateProductForm.jsx';
-const router = createBrowserRouter([
+import AuthProvider from './Context/AuthProvider.jsx';
+import Products from './mainLayout/pages/Products.jsx';
+import { CartProvider } from './Context/CartContext.jsx';
+import Cart from './mainLayout/pages/Cart.jsx';
+ const router = createBrowserRouter([
   {
     path: "/",
     element:  <MainLayout></MainLayout>,
@@ -30,12 +34,26 @@ const router = createBrowserRouter([
       {
         path:"create",
         element:<CreateProductForm></CreateProductForm>
+      },
+      {
+        path:"products",
+        element:<Products></Products>
+      },
+      {
+        path:"cart",
+        element:<Cart></Cart>
       }
     ]
   },
 ]);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <RouterProvider router={router} />,
+  <CartProvider>
+ <AuthProvider> 
+
+  <RouterProvider router={router} />
+  </AuthProvider>
+  </CartProvider>
+  
   </StrictMode>,
 )
