@@ -15,6 +15,8 @@ import AuthProvider from './Context/AuthProvider.jsx';
 import Products from './mainLayout/pages/Products.jsx';
 import ProductDetailsPage from './mainLayout/pages/ProductDetailsPage.jsx';
 import Cart from './mainLayout/pages/Cart.jsx';
+import OrderPage from './mainLayout/pages/OrderPage.jsx';
+import OrdersList from './mainLayout/pages/OrdersList.jsx';
   const router = createBrowserRouter([
   {
     path: "/",
@@ -46,6 +48,14 @@ import Cart from './mainLayout/pages/Cart.jsx';
     {
          path:"cart",
          Component:Cart
+    },
+    {
+      path:"order",
+      Component:OrderPage
+    },
+    {
+      path:"orderList",
+      Component: OrdersList
     }
     ]
   },

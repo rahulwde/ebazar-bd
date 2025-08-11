@@ -83,6 +83,7 @@ export default function ProductDetailsPage() {
           >
             Add to Cart
           </button>
+          
         </div>
       </div>
     </div>

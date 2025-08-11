@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 function getGuestId() {
   let guestId = localStorage.getItem("guestId");
@@ -13,15 +14,15 @@ function getGuestId() {
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const guestId = getGuestId();
-  console.log(guestId)
+  const navigate = useNavigate()
+   const totalPrice = cartItems.reduce((sum, item) => sum + item.sellPrice * item.quantity, 0);
 
   useEffect(() => {
     axios.get(`http://localhost:5000/cart/${guestId}`)
       .then(res => setCartItems(res.data))
       .catch(console.error);
   }, [guestId]);
- console.log(cartItems)
-  const increaseQty = (id) => {
+   const increaseQty = (id) => {
     const item = cartItems.find(i => i._id === id);
     if (!item) return;
     const newQty = Number(item.quantity) + 1;
@@ -89,10 +90,20 @@ export default function Cart() {
                 >
                   Remove
                 </button>
+                 <button
+              onClick={() => navigate("/order", { state: { totalPrice, cartItems } })}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+            >
+              Order Now
+            </button>
+          
               </div>
+
             </li>
+            
           ))}
         </ul>
+        
       )}
     </div>
   );

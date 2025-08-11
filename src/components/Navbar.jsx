@@ -12,6 +12,7 @@ const Navbar = () => {
     { path: "/products", name: "Products" },
     { path: "/create", name: "Create" },
     { path: "/cart", name: "cart" },
+    { path: "/orderList", name: "orderList" },
   ];
 
   const handleLogout = async () => {
