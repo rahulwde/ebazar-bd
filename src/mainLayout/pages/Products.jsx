@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useCart } from "../../Context/CartContext";
-import Swal from "sweetalert2";
+ import Swal from "sweetalert2";
+import { Link } from "react-router";
  
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useCart();
- 
+  
   useEffect(() => {
     axios
       .get("http://localhost:5000/products")
@@ -41,7 +40,7 @@ const Products = () => {
               alt={product.itemName}
               className="w-full h-48 object-cover mb-4 rounded"
             />
-
+             {console.log(product)}
             {/* Product Title */}
             <h2 className="text-lg font-semibold mb-2">{product.itemName}</h2>
 
@@ -76,25 +75,11 @@ const Products = () => {
               </p>
             )}
 
-            {/* Add to Cart or Buy Button (optional) */}
-           <button
-  onClick={() => {
-    addToCart(product);
-    console.log(product)
-     Swal.fire({
-      title: "Added to Cart",
-      text: `${product.itemName} কার্টে যোগ করা হয়েছে!`,
-      icon: "success",
-      timer: 1500,
-      showConfirmButton: false,
-      toast: true,
-      position: "top-end",
-    });
-  }}
-  className="mt-auto bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
->
-  Add to Cart
-</button>
+           <Link to={`/products/${product._id}`}>
+              <button className="btn btn-sm md:btn-md w-full bg-[#f95f35] hover:bg-[#e7552f] text-white font-semibold border-none">
+                See Details
+              </button>
+            </Link>
 
           </div>
         ))}

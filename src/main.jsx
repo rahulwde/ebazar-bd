@@ -13,9 +13,9 @@ import Signup from './components/SignUp.jsx';
 import CreateProductForm from './components/CreateProductForm.jsx';
 import AuthProvider from './Context/AuthProvider.jsx';
 import Products from './mainLayout/pages/Products.jsx';
-import { CartProvider } from './Context/CartContext.jsx';
+import ProductDetailsPage from './mainLayout/pages/ProductDetailsPage.jsx';
 import Cart from './mainLayout/pages/Cart.jsx';
- const router = createBrowserRouter([
+  const router = createBrowserRouter([
   {
     path: "/",
     element:  <MainLayout></MainLayout>,
@@ -40,20 +40,22 @@ import Cart from './mainLayout/pages/Cart.jsx';
         element:<Products></Products>
       },
       {
-        path:"cart",
-        element:<Cart></Cart>
-      }
+        path:"products/:id",
+        element:<ProductDetailsPage></ProductDetailsPage>
+      },
+    {
+         path:"cart",
+         Component:Cart
+    }
     ]
   },
 ]);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <CartProvider>
  <AuthProvider> 
-
+ 
   <RouterProvider router={router} />
-  </AuthProvider>
-  </CartProvider>
+   </AuthProvider>
   
   </StrictMode>,
 )
