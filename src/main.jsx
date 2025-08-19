@@ -15,9 +15,11 @@ import AuthProvider from './Context/AuthProvider.jsx';
 import Products from './mainLayout/pages/Products.jsx';
 import ProductDetailsPage from './mainLayout/pages/ProductDetailsPage.jsx';
 import Cart from './mainLayout/pages/Cart.jsx';
-import OrderPage from './mainLayout/pages/OrderPage.jsx';
-import OrdersList from './mainLayout/pages/OrdersList.jsx';
-  const router = createBrowserRouter([
+import PrivateRoute from './mainLayout/pages/PrivateRoute.jsx';
+import OrderSummary from './mainLayout/pages/OrderSummary.jsx';
+import MyOrders from './mainLayout/pages/MyOrders.jsx';
+import AllOrders from './mainLayout/pages/AllOrders.jsx';
+    const router = createBrowserRouter([
   {
     path: "/",
     element:  <MainLayout></MainLayout>,
@@ -50,13 +52,18 @@ import OrdersList from './mainLayout/pages/OrdersList.jsx';
          Component:Cart
     },
     {
-      path:"order",
-      Component:OrderPage
+      path:"order-summary",
+      element:<PrivateRoute><OrderSummary></OrderSummary></PrivateRoute>
     },
     {
-      path:"orderList",
-      Component: OrdersList
+      path:"my-order",
+      element:<MyOrders></MyOrders>
+    },
+    {
+      path:"all-orders",
+      element:<AllOrders></AllOrders>
     }
+    
     ]
   },
 ]);

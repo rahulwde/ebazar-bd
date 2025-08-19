@@ -27,6 +27,7 @@ export default function ProductDetailsPage() {
     productId: product._id,
     itemName: product.itemName,
     sellPrice: product.sellPrice,
+    image : product.image,
     quantity: 1,
   })
   .then(() => alert("Added to cart"))

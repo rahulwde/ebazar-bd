@@ -2,11 +2,15 @@ import { Link, NavLink } from "react-router";
 import { use, useState } from "react";
 import { BsCart4 } from "react-icons/bs";
 import { AuthContext } from "../Context/Authcontext";
-
+import useUserRole from "../hooks/useUserRole";
+ 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = use(AuthContext);
-
+  console.log(user?.email)
+    const {role , roleLoading} = useUserRole()
+    if(roleLoading) return <p>loading</p>
+  console.log(role)
   const navLinks = [
     { path: "/", name: "Home" },
     { path: "/products", name: "Products" },
@@ -33,6 +37,7 @@ const Navbar = () => {
         >
           <BsCart4 size={28} />
           <div className="leading-5 text-left font-bold text-[18px]">
+            
             <span className="text-black">Digital</span>
             <br />
             <span>

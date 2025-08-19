@@ -4,23 +4,40 @@ import Swal from "sweetalert2";
 import signupAnimation from "../assets/Login Leady.json";
 import { AuthContext } from "../Context/Authcontext";
 import { useNavigate } from "react-router";
- 
+import axios from "axios";   // ✅ axios যোগ করো
+
 const Signup = () => {
   const { createUser, setUser, googleSignIn } = use(AuthContext);
-const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  // 🔹 Backend এ user save করার ফাংশন
+  const saveUserToDB = async (user) => {
+    const newUser = {
+      name: user.displayName || "No Name",
+      email: user.email,
+      role: "user", // default role
+    };
+    try {
+      await axios.post("http://localhost:5000/users", newUser);
+    } catch (error) {
+      console.error("Error saving user:", error.message);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
- 
+
     try {
       const result = await createUser(email, password);
-      setUser({
-        ...result.user,
-        displayName: name,
-       });
+      const loggedUser = { ...result.user, displayName: name };
+      setUser(loggedUser);
+
+      // ✅ DB তে পাঠানো
+      await saveUserToDB(loggedUser);
 
       Swal.fire({
         icon: "success",
@@ -31,7 +48,7 @@ const navigate = useNavigate()
       });
 
       form.reset();
-     navigate("/")
+      navigate("/");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -46,6 +63,9 @@ const navigate = useNavigate()
       const result = await googleSignIn();
       setUser(result.user);
 
+      // ✅ DB তে পাঠানো
+      await saveUserToDB(result.user);
+
       Swal.fire({
         icon: "success",
         title: "Login Successful!",
@@ -53,7 +73,7 @@ const navigate = useNavigate()
         timer: 2000,
         showConfirmButton: false,
       });
-      navigate("/")
+      navigate("/");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -94,7 +114,6 @@ const navigate = useNavigate()
                 placeholder="Your full name"
               />
             </div>
- 
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
