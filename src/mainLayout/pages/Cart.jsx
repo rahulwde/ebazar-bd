@@ -2,7 +2,8 @@ import React, { use, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../../Context/Authcontext";
- 
+import Swal from "sweetalert2";
+
 // ✅ Generate or retrieve guestId
 function getGuestId() {
   let guestId = localStorage.getItem("guestId");
@@ -17,7 +18,7 @@ export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const guestId = getGuestId();
   const navigate = useNavigate();
-  const { user } = use(AuthContext)
+  const { user } = use(AuthContext);
 
   // ✅ Fetch cart items
   useEffect(() => {
@@ -55,148 +56,124 @@ export default function Cart() {
       );
   };
 
-  // ✅ Remove item
+  // ✅ Remove item with SweetAlert2 confirmation
   const removeItem = (id) => {
-    axios
-      .delete(`http://localhost:5000/cart/${id}`)
-      .then(() => {
-        setCartItems((items) => items.filter((i) => i._id !== id));
-      })
-      .catch((err) => console.error(`Error removing item ${id}:`, err));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this item from the cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#39ff14",
+      cancelButtonColor: "#f95f35",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:5000/cart/${id}`)
+          .then(() => {
+            setCartItems((items) => items.filter((i) => i._id !== id));
+            Swal.fire("Removed!", "Item has been removed.", "success");
+          })
+          .catch((err) => console.error(err));
+      }
+    });
   };
 
   // ✅ Handle single item order
-const handleSingleOrder = (item) => {
-  if (!user) return navigate("/login", { state: { from: { pathname: "/order-summary" } } });
+  const handleSingleOrder = (item) => {
+    if (!user)
+      return navigate("/login", {
+        state: { from: { pathname: "/order-summary" } },
+      });
 
-   const orderData = {
-    guestId,
-    items: [
-      {
-        productId: item._id,
-        productName: item.itemName,
-        quantity: item.quantity,
-        price: item.sellPrice,
-        image: item.image,
-      },
-    ],
-    totalPrice: item.sellPrice * item.quantity,
-    status: "pending",
-    createdAt: new Date(),
-  };
-
-  navigate("/order-summary", { state: { order: orderData } });
-};
-
-  // ✅ Handle Order All
-  const handleOrderNow = async () => {
-    if (!user) return navigate("/login", { state: { from: { pathname: "/order-summary" } } });
-
-    try {
-      const totalPrice = cartItems.reduce(
-        (sum, item) => sum + item.sellPrice * item.quantity,
-        0
-      );
-
-      const orderData = {
-        guestId,
-        items: cartItems.map((item) => ({
+    const orderData = {
+      guestId,
+      items: [
+        {
           productId: item._id,
           productName: item.itemName,
           quantity: item.quantity,
           price: item.sellPrice,
           image: item.image,
-        })),
-        totalPrice,
-        status: "pending",
-        createdAt: new Date(),
-      };
+        },
+      ],
+      totalPrice: item.sellPrice * item.quantity,
+      status: "pending",
+      createdAt: new Date(),
+    };
 
-      const res = await axios.post("http://localhost:5000/orders", orderData);
-
-      if (res.status === 201) {
-        alert("✅ Order placed successfully!");
-        navigate("/order-summary", { state: { order: res.data } });
-      }
-    } catch (err) {
-      console.error("Error placing order:", err);
-      alert("❌ Failed to place order!");
-    }
+    navigate("/order-summary", { state: { order: orderData } });
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h2 className="text-xl font-semibold mb-4">My Cart</h2>
+    <div className="max-w-lg mx-auto p-4">
+      <h2 className="text-xl font-semibold mb-4 text-center">🛒 My Cart</h2>
 
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="text-center text-gray-600">Your cart is empty.</p>
       ) : (
-        <>
-          <ul>
-            {cartItems.map((item) => (
-              <li
-                key={item._id}
-                className="flex items-center justify-between border-b py-3"
-              >
-                {/* ✅ Image and info */}
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={item.image}
-                    alt={item.itemName}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                  <div>
-                    <h3 className="font-semibold">{item.itemName}</h3>
-                    <p>Price: ${item.sellPrice}</p>
-                    <p>Total: ${item.sellPrice * item.quantity}</p>
-                  </div>
-                </div>
-
-                {/* ✅ Controls */}
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => decreaseQty(item._id)}
-                    disabled={item.quantity <= 1}
-                    className="bg-gray-200 px-2 rounded"
-                  >
-                    -
-                  </button>
-                  <span>{item.quantity}</span>
-                  <button
-                    onClick={() => increaseQty(item._id)}
-                    className="bg-gray-200 px-2 rounded"
-                  >
-                    +
-                  </button>
-
-                  <button
-                    onClick={() => removeItem(item._id)}
-                    className="ml-4 text-red-600 hover:text-red-800"
-                  >
-                    Remove
-                  </button>
-
-                  <button
-                    onClick={() => handleSingleOrder(item)}
-                    className="ml-2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                  >
-                    Order
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          {/* ✅ Order All button */}
-          <div className="mt-6 text-right">
-            <button
-              onClick={handleOrderNow}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        <ul className="space-y-4">
+          {cartItems.map((item) => (
+            <li
+              key={item._id}
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between border p-3 rounded-lg shadow-sm transform transition duration-300 hover:scale-105 hover:shadow-lg"
             >
-              Order All
-            </button>
-          </div>
-        </>
+              {/* ✅ Image and info */}
+              <div className="flex items-center space-x-3">
+                <img
+                  src={item.image}
+                  alt={item.itemName}
+                  className="w-16 h-16 object-cover rounded"
+                />
+                <div>
+                  <h3 className="font-semibold text-sm sm:text-base">
+                    {item.itemName}
+                  </h3>
+                  <p className="text-sm font-bold text-gray-900">
+                    Price: ৳{item.sellPrice}
+                  </p>
+                  <p className="text-sm font-bold text-gray-900">
+                    Total: ৳{item.sellPrice * item.quantity}
+                  </p>
+                </div>
+              </div>
+
+              {/* ✅ Controls */}
+              <div className="flex items-center mt-3 sm:mt-0 space-x-2">
+                <button
+                  onClick={() => decreaseQty(item._id)}
+                  disabled={item.quantity <= 1}
+                  className="bg-gray-200 px-2 py-1 rounded"
+                >
+                  -
+                </button>
+                <span className="px-2">{item.quantity}</span>
+                <button
+                  onClick={() => increaseQty(item._id)}
+                  className="bg-gray-200 px-2 py-1 rounded"
+                >
+                  +
+                </button>
+
+                {/* Remove button with gradient */}
+                <button
+                  onClick={() => removeItem(item._id)}
+                  className="ml-2 px-3 py-1 rounded text-white font-semibold bg-gradient-to-r from-[#f95f35] to-[#e7552f] hover:from-[#e7552f] hover:to-[#f95f35] transition duration-300 text-sm"
+                >
+                  Remove
+                </button>
+
+                {/* Order button with gradient */}
+                <button
+                  onClick={() => handleSingleOrder(item)}
+                  className="ml-2 px-3 py-1 rounded text-white font-semibold bg-gradient-to-r from-[#00fff5] to-[#39ff14] hover:from-[#39ff14] hover:to-[#00fff5] transition duration-300 text-sm"
+                >
+                  Order
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

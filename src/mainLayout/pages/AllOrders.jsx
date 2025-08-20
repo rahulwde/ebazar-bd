@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Loader from "./Loader";
 
 export default function AllOrders() {
   const [orders, setOrders] = useState([]);
@@ -38,7 +39,7 @@ export default function AllOrders() {
     }
   };
 
-  if (loading) return <p className="text-center mt-10">Loading orders...</p>;
+  if (loading) return  <Loader></Loader>
 
   return (
     <div className="max-w-5xl mx-auto p-4 space-y-6">

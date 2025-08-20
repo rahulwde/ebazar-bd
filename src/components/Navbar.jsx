@@ -3,21 +3,14 @@ import { use, useState } from "react";
 import { BsCart4 } from "react-icons/bs";
 import { AuthContext } from "../Context/Authcontext";
 import useUserRole from "../hooks/useUserRole";
- 
+import Loader from "../mainLayout/pages/Loader";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = use(AuthContext);
-  console.log(user?.email)
-    const {role , roleLoading} = useUserRole()
-    if(roleLoading) return <p>loading</p>
-  console.log(role)
-  const navLinks = [
-    { path: "/", name: "Home" },
-    { path: "/products", name: "Products" },
-    { path: "/create", name: "Create" },
-    { path: "/cart", name: "cart" },
-    { path: "/orderList", name: "orderList" },
-  ];
+  const { role, roleLoading } = useUserRole();
+
+  if (roleLoading) return  <Loader></Loader>
 
   const handleLogout = async () => {
     try {
@@ -27,8 +20,24 @@ const Navbar = () => {
     }
   };
 
+  // ✅ role অনুযায়ী navigation link
+  const navLinks =
+    role === "admin"
+      ? [
+          { path: "/", name: "Home" },
+          { path: "/products", name: "Products" },
+          { path: "/create", name: "Create" },
+          { path: "/all-orders", name: "All Orders" },
+        ]
+      : [
+          { path: "/", name: "Home" },
+          { path: "/products", name: "Products" },
+          // My Order শুধু তখনই add হবে যখন user login থাকবে
+          ...(user && role === "user" ? [{ path: "/my-order", name: "My Order" }] : []),
+        ];
+
   return (
-    <nav className="shadow-md sticky top-0 z-50">
+    <nav className="shadow-md sticky top-0 z-50 bg-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link
@@ -37,7 +46,6 @@ const Navbar = () => {
         >
           <BsCart4 size={28} />
           <div className="leading-5 text-left font-bold text-[18px]">
-            
             <span className="text-black">Digital</span>
             <br />
             <span>
@@ -62,13 +70,21 @@ const Navbar = () => {
             </NavLink>
           ))}
 
+                <Link to="/cart" className="text-gray-700 hover:text-blue-600">
+                  <BsCart4 size={22} />
+                </Link>
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
+            <div className="flex items-center gap-4">
+              {/* ✅ শুধু user এর জন্য cart icon */}
+          
+         
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <Link
               to="/login"
@@ -128,15 +144,27 @@ const Navbar = () => {
           ))}
 
           {user ? (
-            <button
-              onClick={() => {
-                handleLogout();
-                setIsOpen(false);
-              }}
-              className="block bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 mt-2"
-            >
-              Logout
-            </button>
+            <div className="space-y-2">
+              {/* ✅ Mobile Cart Icon শুধু user এর জন্য */}
+              {role === "user" && (
+                <Link
+                  to="/cart"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
+                >
+                  <BsCart4 size={22} />
+                </Link>
+              )}
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                className="block bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 mt-2"
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <Link
               to="/login"

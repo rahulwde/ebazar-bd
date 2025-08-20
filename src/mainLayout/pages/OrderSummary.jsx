@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/Authcontext";
+import { TextField, Button, Typography, Box, Card, CardContent } from "@mui/material";
 
 export default function OrderSummary() {
   const location = useLocation();
@@ -12,15 +13,12 @@ export default function OrderSummary() {
 
   if (!order) {
     return (
-      <div className="max-w-3xl mx-auto p-4 text-center">
-        <h2 className="text-xl font-semibold mb-4">No Order Found</h2>
-        <button
-          onClick={() => navigate("/cart")}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
+      <Box className="max-w-3xl mx-auto p-4 text-center">
+        <Typography variant="h5" mb={2}>No Order Found</Typography>
+        <Button variant="contained" color="primary" onClick={() => navigate("/cart")}>
           Go to Cart
-        </button>
-      </div>
+        </Button>
+      </Box>
     );
   }
 
@@ -48,11 +46,8 @@ export default function OrderSummary() {
     form.append("image", file);
 
     try {
-      const apiKey = "26f7c897fe17caa771f71e53acc91721"; // imgbb API key
-      const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${apiKey}`,
-        form
-      );
+      const apiKey = "26f7c897fe17caa771f71e53acc91721";
+      const res = await axios.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, form);
       setFormData((prev) => ({ ...prev, paymentProof: res.data.data.url }));
       Swal.fire("✅ Success", "Image uploaded successfully!", "success");
     } catch (err) {
@@ -84,7 +79,7 @@ export default function OrderSummary() {
       if (res.status === 201) {
         Swal.fire(
           "✅ Order Confirmed",
-          `Your order is placed. Advance payment: $${formData.advancePayment}`,
+          `Your order is placed. Advance payment: ৳${formData.advancePayment}`,
           "success"
         );
         navigate("/");
@@ -98,64 +93,122 @@ export default function OrderSummary() {
   const isSubmitDisabled = !formData.paymentProof && !formData.transactionId;
 
   return (
-    <div className="max-w-3xl mx-auto p-4 space-y-6">
-      <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
+    <Box
+      className="max-w-3xl mx-auto p-4 space-y-6"
+      sx={{
+        background: 'linear-gradient(135deg, #00fff5, #39ff14)',
+        color: '#000',
+        borderRadius: 3,
+      }}
+    >
+      <Typography variant="h4" fontWeight="bold" textAlign="center" mb={2}>
+        Order Summary
+      </Typography>
 
       {/* Order Items */}
-      <ul className="space-y-3">
+      <Box display="flex" flexDirection="column" gap={2}>
         {order.items.map((item, index) => (
-          <li key={index} className="flex items-center justify-between border-b py-3">
-            <div className="flex items-center space-x-4">
+          <Card
+            key={index}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              p: 1,
+              background: 'linear-gradient(135deg, #f95f35, #e7552f)',
+              color: '#fff',
+              transition: '0.3s',
+              '&:hover': { transform: 'scale(1.03)', boxShadow: 6 }
+            }}
+          >
+            <Box display="flex" alignItems="center" gap={2}>
               <img src={item.image} alt={item.productName} className="w-16 h-16 object-cover rounded" />
-              <div>
-                <h3 className="font-semibold">{item.productName}</h3>
-                <p>Price: ${item.price}</p>
-                <p>Quantity: {item.quantity}</p>
-                <p>Total: ${item.price * item.quantity}</p>
-              </div>
-            </div>
-          </li>
+              <Box>
+                <Typography fontWeight="bold">{item.productName}</Typography>
+                <Typography fontWeight="bold">Price: ৳{item.price}</Typography>
+                <Typography>Quantity: {item.quantity}</Typography>
+                <Typography fontWeight="bold">Total: ৳{item.price * item.quantity}</Typography>
+              </Box>
+            </Box>
+          </Card>
         ))}
-      </ul>
+      </Box>
 
-      <div className="text-right text-xl font-semibold">Total Price: ${order.totalPrice}</div>
+      <Typography variant="h6" fontWeight="bold" textAlign="right">
+        Total Price: ৳{order.totalPrice}
+      </Typography>
 
       {/* User Details Form */}
-      <div className="border p-4 rounded shadow space-y-4">
-        <h3 className="text-lg font-semibold">Your Details</h3>
-        <form className="space-y-3">
-          <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" className="w-full px-3 py-2 border rounded" />
-          <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="w-full px-3 py-2 border rounded" />
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" className="w-full px-3 py-2 border rounded" />
-          <textarea name="address" value={formData.address} onChange={handleChange} placeholder="Address" className="w-full px-3 py-2 border rounded" rows={3} />
+      <Card sx={{ p: 3, background: 'rgba(255,255,255,0.9)', color: '#000' }}>
+        <CardContent>
+          <Typography variant="h6" fontWeight="bold" mb={2}>Your Details</Typography>
+          <Box display="flex" flexDirection="column" gap={2}>
+            <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth variant="outlined" sx={{backgroundColor: '#e0f7fa'}} />
+            <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth variant="outlined" sx={{backgroundColor: '#e0f7fa'}} />
+            <TextField label="Phone" name="phone" value={formData.phone} onChange={handleChange} fullWidth variant="outlined" sx={{backgroundColor: '#e0f7fa'}} />
+            <TextField
+              label="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              sx={{backgroundColor: '#e0f7fa'}}
+            />
 
-          <div>
-            <label className="block font-medium mb-1">Advance Payment</label>
-            <input type="number" name="advancePayment" value={formData.advancePayment} onChange={handleChange} className="w-full px-3 py-2 border rounded" />
-          </div>
+            {/* Advance Payment as Button */}
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{
+                background: 'linear-gradient(to right, #00fff5, #39ff14)',
+                fontWeight: 'bold',
+                cursor: 'default',
+                '&:hover': { background: 'linear-gradient(to right, #00fff5, #39ff14)' },
+              }}
+            >
+              Advance Payment: ৳{formData.advancePayment}
+            </Button>
 
-          <div>
-            <label className="block font-medium mb-1">Transaction ID (Optional)</label>
-            <input type="text" name="transactionId" value={formData.transactionId} onChange={handleChange} placeholder="Enter transaction ID" className="w-full px-3 py-2 border rounded" />
-          </div>
+            <TextField
+              label="Transaction ID (Optional)"
+              name="transactionId"
+              value={formData.transactionId}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              sx={{backgroundColor: '#e0f7fa'}}
+            />
 
-          <div>
-            <label className="block font-medium mb-1">Payment Proof (Image)</label>
-            <input type="file" accept="image/*" onChange={handleFileUpload} />
-            {formData.paymentProof && <img src={formData.paymentProof} alt="Payment Proof" className="w-32 mt-2 rounded" />}
-          </div>
-        </form>
+            <Box>
+              <Typography mb={1}>Payment Proof (Image)</Typography>
+              <input type="file" accept="image/*" onChange={handleFileUpload} />
+              {formData.paymentProof && (
+                <img src={formData.paymentProof} alt="Payment Proof" className="w-32 mt-2 rounded" />
+              )}
+            </Box>
 
-        <div className="text-center mt-4">
-          <button
-            onClick={handleConfirmOrder}
-            disabled={isSubmitDisabled}
-            className={`px-4 py-2 rounded text-white ${isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"}`}
-          >
-            Confirm Order
-          </button>
-        </div>
-      </div>
-    </div>
+            <Button
+              onClick={handleConfirmOrder}
+              disabled={isSubmitDisabled}
+              variant="contained"
+              sx={{
+                mt: 2,
+                background: isSubmitDisabled ? 'gray' : 'linear-gradient(to right, #00fff5, #39ff14)',
+                color: '#000',
+                fontWeight: 'bold',
+                '&:hover': {
+                  background: isSubmitDisabled ? 'gray' : 'linear-gradient(to right, #39ff14, #00fff5)'
+                }
+              }}
+            >
+              Confirm Order
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
