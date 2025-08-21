@@ -10,7 +10,7 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products")
+      .get("https://ecommerce-backend-fdas.vercel.app/products")
       .then((res) => {
         setProducts(res.data);
         setLoading(false);
@@ -21,7 +21,7 @@ const Products = () => {
       });
   }, []);
 
-  if (loading) return  <Loader></Loader>
+  if (loading) return <Loader></Loader>;
   if (products.length === 0)
     return <p className="text-center mt-10">No products found.</p>;
 

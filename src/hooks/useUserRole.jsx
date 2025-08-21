@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../Context/Authcontext";
- 
+
 export default function useUserRole() {
   const { user } = useContext(AuthContext);
   const [role, setRole] = useState(null);
@@ -12,7 +12,9 @@ export default function useUserRole() {
     const fetchRole = async () => {
       if (user?.email) {
         try {
-          const res = await axios.get(`http://localhost:5000/users/${user.email}`);
+          const res = await axios.get(
+            `https://ecommerce-backend-fdas.vercel.app/users/${user.email}`
+          );
           setRole(res.data.role || "user"); // default 'user' দিলে undefined problem gone
         } catch (error) {
           console.error("Error fetching role:", error.message);

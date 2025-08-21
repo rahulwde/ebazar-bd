@@ -14,7 +14,7 @@ export default function MyOrders() {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/orders?email=${user.email}`
+          `https://ecommerce-backend-fdas.vercel.app/orders?email=${user.email}`
         );
         setOrders(res.data);
         setLoading(false);
@@ -28,17 +28,23 @@ export default function MyOrders() {
   }, [user]);
 
   if (!user) {
-    return <p className="text-center mt-10 text-[#0d0d0e]">Please login to view your orders.</p>;
+    return (
+      <p className="text-center mt-10 text-[#0d0d0e]">
+        Please login to view your orders.
+      </p>
+    );
   }
 
-  if (loading) return  <Loader></Loader>
+  if (loading) return <Loader></Loader>;
 
   if (orders.length === 0)
     return <p className="text-center mt-10 text-[#0d0d0e]">No orders found.</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-4 space-y-6">
-      <h2 className="text-2xl font-bold mb-4 text-center text-[#0d0d0e]">My Orders</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center text-[#0d0d0e]">
+        My Orders
+      </h2>
 
       <ul className="space-y-4">
         {orders.map((order) => (
@@ -84,8 +90,12 @@ export default function MyOrders() {
                       <ul className="pl-4 list-disc">
                         {order.items.map((item, idx) => (
                           <li key={idx} className="flex justify-between">
-                            <span>{item.productName} x {item.quantity}</span>
-                            <span className="font-bold p-2">৳{item.price * item.quantity}</span>
+                            <span>
+                              {item.productName} x {item.quantity}
+                            </span>
+                            <span className="font-bold p-2">
+                              ৳{item.price * item.quantity}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -102,7 +112,9 @@ export default function MyOrders() {
             {/* Payment Proof */}
             {order.paymentProof && (
               <div className="flex items-center gap-4">
-                <span className="font-semibold text-[#0d0d0e]">Payment Proof:</span>
+                <span className="font-semibold text-[#0d0d0e]">
+                  Payment Proof:
+                </span>
                 <img
                   src={order.paymentProof}
                   alt="Payment Proof"

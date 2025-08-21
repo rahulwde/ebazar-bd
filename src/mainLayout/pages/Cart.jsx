@@ -23,7 +23,7 @@ export default function Cart() {
   // ✅ Fetch cart items
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/cart/guest/${guestId}`)
+      .get(`https://ecommerce-backend-fdas.vercel.app/cart/guest/${guestId}`)
       .then((res) => setCartItems(res.data))
       .catch((err) => console.error("Error fetching cart:", err));
   }, [guestId]);
@@ -45,15 +45,13 @@ export default function Cart() {
   // ✅ Update quantity in backend
   const updateQuantity = (id, quantity) => {
     axios
-      .put(`http://localhost:5000/cart/${id}`, { quantity })
+      .put(`https://ecommerce-backend-fdas.vercel.app/cart/${id}`, { quantity })
       .then(() => {
         setCartItems((items) =>
           items.map((i) => (i._id === id ? { ...i, quantity } : i))
         );
       })
-      .catch((err) =>
-        console.error(`Error updating quantity for ${id}:`, err)
-      );
+      .catch((err) => console.error(`Error updating quantity for ${id}:`, err));
   };
 
   // ✅ Remove item with SweetAlert2 confirmation
@@ -69,7 +67,7 @@ export default function Cart() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:5000/cart/${id}`)
+          .delete(`https://ecommerce-backend-fdas.vercel.app/cart/${id}`)
           .then(() => {
             setCartItems((items) => items.filter((i) => i._id !== id));
             Swal.fire("Removed!", "Item has been removed.", "success");

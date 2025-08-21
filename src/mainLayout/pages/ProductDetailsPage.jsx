@@ -11,7 +11,7 @@ export default function ProductDetailsPage() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/products/${id}`)
+      .get(`https://ecommerce-backend-fdas.vercel.app/products/${id}`)
       .then((res) => {
         setProduct(res.data);
         setLoading(false);
@@ -28,7 +28,7 @@ export default function ProductDetailsPage() {
       localStorage.setItem("guestId", guestId);
 
     axios
-      .post("http://localhost:5000/cart", {
+      .post("https://ecommerce-backend-fdas.vercel.app/cart", {
         guestId,
         productId: product._id,
         itemName: product.itemName,
@@ -58,13 +58,11 @@ export default function ProductDetailsPage() {
   }
 
   if (loading) {
-    return  <Loader></Loader>
+    return <Loader></Loader>;
   }
 
   if (!product) {
-    return (
-      <p className="text-center mt-8 text-red-500">Product not found</p>
-    );
+    return <p className="text-center mt-8 text-red-500">Product not found</p>;
   }
 
   return (
@@ -99,7 +97,9 @@ export default function ProductDetailsPage() {
                   <td>{product.productSerial}</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="font-semibold pr-2 py-2">Available Quantity:</td>
+                  <td className="font-semibold pr-2 py-2">
+                    Available Quantity:
+                  </td>
                   <td>{product.quantity}</td>
                 </tr>
                 <tr className="border-b">

@@ -3,7 +3,14 @@ import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Context/Authcontext";
-import { TextField, Button, Typography, Box, Card, CardContent } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 export default function OrderSummary() {
   const location = useLocation();
@@ -14,8 +21,14 @@ export default function OrderSummary() {
   if (!order) {
     return (
       <Box className="max-w-3xl mx-auto p-4 text-center">
-        <Typography variant="h5" mb={2}>No Order Found</Typography>
-        <Button variant="contained" color="primary" onClick={() => navigate("/cart")}>
+        <Typography variant="h5" mb={2}>
+          No Order Found
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/cart")}
+        >
           Go to Cart
         </Button>
       </Box>
@@ -47,7 +60,10 @@ export default function OrderSummary() {
 
     try {
       const apiKey = "26f7c897fe17caa771f71e53acc91721";
-      const res = await axios.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, form);
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${apiKey}`,
+        form
+      );
       setFormData((prev) => ({ ...prev, paymentProof: res.data.data.url }));
       Swal.fire("✅ Success", "Image uploaded successfully!", "success");
     } catch (err) {
@@ -74,7 +90,10 @@ export default function OrderSummary() {
         status: "pending",
       };
 
-      const res = await axios.post("http://localhost:5000/orders", orderPayload);
+      const res = await axios.post(
+        "https://ecommerce-backend-fdas.vercel.app/orders",
+        orderPayload
+      );
 
       if (res.status === 201) {
         Swal.fire(
@@ -96,8 +115,8 @@ export default function OrderSummary() {
     <Box
       className="max-w-3xl mx-auto p-4 space-y-6"
       sx={{
-        background: 'linear-gradient(135deg, #00fff5, #39ff14)',
-        color: '#000',
+        background: "linear-gradient(135deg, #00fff5, #39ff14)",
+        color: "#000",
         borderRadius: 3,
       }}
     >
@@ -111,23 +130,29 @@ export default function OrderSummary() {
           <Card
             key={index}
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
               p: 1,
-              background: 'linear-gradient(135deg, #f95f35, #e7552f)',
-              color: '#fff',
-              transition: '0.3s',
-              '&:hover': { transform: 'scale(1.03)', boxShadow: 6 }
+              background: "linear-gradient(135deg, #f95f35, #e7552f)",
+              color: "#fff",
+              transition: "0.3s",
+              "&:hover": { transform: "scale(1.03)", boxShadow: 6 },
             }}
           >
             <Box display="flex" alignItems="center" gap={2}>
-              <img src={item.image} alt={item.productName} className="w-16 h-16 object-cover rounded" />
+              <img
+                src={item.image}
+                alt={item.productName}
+                className="w-16 h-16 object-cover rounded"
+              />
               <Box>
                 <Typography fontWeight="bold">{item.productName}</Typography>
                 <Typography fontWeight="bold">Price: ৳{item.price}</Typography>
                 <Typography>Quantity: {item.quantity}</Typography>
-                <Typography fontWeight="bold">Total: ৳{item.price * item.quantity}</Typography>
+                <Typography fontWeight="bold">
+                  Total: ৳{item.price * item.quantity}
+                </Typography>
               </Box>
             </Box>
           </Card>
@@ -139,13 +164,39 @@ export default function OrderSummary() {
       </Typography>
 
       {/* User Details Form */}
-      <Card sx={{ p: 3, background: 'rgba(255,255,255,0.9)', color: '#000' }}>
+      <Card sx={{ p: 3, background: "rgba(255,255,255,0.9)", color: "#000" }}>
         <CardContent>
-          <Typography variant="h6" fontWeight="bold" mb={2}>Your Details</Typography>
+          <Typography variant="h6" fontWeight="bold" mb={2}>
+            Your Details
+          </Typography>
           <Box display="flex" flexDirection="column" gap={2}>
-            <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth variant="outlined" sx={{backgroundColor: '#e0f7fa'}} />
-            <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth variant="outlined" sx={{backgroundColor: '#e0f7fa'}} />
-            <TextField label="Phone" name="phone" value={formData.phone} onChange={handleChange} fullWidth variant="outlined" sx={{backgroundColor: '#e0f7fa'}} />
+            <TextField
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              sx={{ backgroundColor: "#e0f7fa" }}
+            />
+            <TextField
+              label="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              sx={{ backgroundColor: "#e0f7fa" }}
+            />
+            <TextField
+              label="Phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              sx={{ backgroundColor: "#e0f7fa" }}
+            />
             <TextField
               label="Address"
               name="address"
@@ -155,7 +206,7 @@ export default function OrderSummary() {
               multiline
               rows={3}
               variant="outlined"
-              sx={{backgroundColor: '#e0f7fa'}}
+              sx={{ backgroundColor: "#e0f7fa" }}
             />
 
             {/* Advance Payment as Button */}
@@ -163,10 +214,12 @@ export default function OrderSummary() {
               variant="contained"
               fullWidth
               sx={{
-                background: 'linear-gradient(to right, #00fff5, #39ff14)',
-                fontWeight: 'bold',
-                cursor: 'default',
-                '&:hover': { background: 'linear-gradient(to right, #00fff5, #39ff14)' },
+                background: "linear-gradient(to right, #00fff5, #39ff14)",
+                fontWeight: "bold",
+                cursor: "default",
+                "&:hover": {
+                  background: "linear-gradient(to right, #00fff5, #39ff14)",
+                },
               }}
             >
               Advance Payment: ৳{formData.advancePayment}
@@ -179,14 +232,18 @@ export default function OrderSummary() {
               onChange={handleChange}
               fullWidth
               variant="outlined"
-              sx={{backgroundColor: '#e0f7fa'}}
+              sx={{ backgroundColor: "#e0f7fa" }}
             />
 
             <Box>
               <Typography mb={1}>Payment Proof (Image)</Typography>
               <input type="file" accept="image/*" onChange={handleFileUpload} />
               {formData.paymentProof && (
-                <img src={formData.paymentProof} alt="Payment Proof" className="w-32 mt-2 rounded" />
+                <img
+                  src={formData.paymentProof}
+                  alt="Payment Proof"
+                  className="w-32 mt-2 rounded"
+                />
               )}
             </Box>
 
@@ -196,12 +253,16 @@ export default function OrderSummary() {
               variant="contained"
               sx={{
                 mt: 2,
-                background: isSubmitDisabled ? 'gray' : 'linear-gradient(to right, #00fff5, #39ff14)',
-                color: '#000',
-                fontWeight: 'bold',
-                '&:hover': {
-                  background: isSubmitDisabled ? 'gray' : 'linear-gradient(to right, #39ff14, #00fff5)'
-                }
+                background: isSubmitDisabled
+                  ? "gray"
+                  : "linear-gradient(to right, #00fff5, #39ff14)",
+                color: "#000",
+                fontWeight: "bold",
+                "&:hover": {
+                  background: isSubmitDisabled
+                    ? "gray"
+                    : "linear-gradient(to right, #39ff14, #00fff5)",
+                },
               }}
             >
               Confirm Order

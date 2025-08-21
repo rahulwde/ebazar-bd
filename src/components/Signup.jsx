@@ -18,7 +18,7 @@ const Signup = () => {
       role: "user", // default role
     };
     try {
-      await axios.post("http://localhost:5000/users", newUser);
+      await axios.post("https://ecommerce-backend-fdas.vercel.app/users", newUser);
     } catch (error) {
       console.error("Error saving user:", error.message);
     }

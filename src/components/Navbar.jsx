@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router";
-import { use, useState } from "react";
+import { useState, useContext } from "react";
 import { BsCart4 } from "react-icons/bs";
 import { AuthContext } from "../Context/Authcontext";
 import useUserRole from "../hooks/useUserRole";
@@ -7,10 +7,10 @@ import Loader from "../mainLayout/pages/Loader";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logOut } = use(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const { role, roleLoading } = useUserRole();
 
-  if (roleLoading) return  <Loader></Loader>
+  if (roleLoading) return <Loader />;
 
   const handleLogout = async () => {
     try {
@@ -20,7 +20,6 @@ const Navbar = () => {
     }
   };
 
-  // ✅ role অনুযায়ী navigation link
   const navLinks =
     role === "admin"
       ? [
@@ -32,7 +31,6 @@ const Navbar = () => {
       : [
           { path: "/", name: "Home" },
           { path: "/products", name: "Products" },
-          // My Order শুধু তখনই add হবে যখন user login থাকবে
           ...(user && role === "user" ? [{ path: "/my-order", name: "My Order" }] : []),
         ];
 
@@ -55,7 +53,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-4">
           {navLinks.map((link) => (
             <NavLink
               key={link.path}
@@ -70,40 +68,54 @@ const Navbar = () => {
             </NavLink>
           ))}
 
-                <Link to="/cart" className="text-gray-700 hover:text-blue-600">
-                  <BsCart4 size={22} />
-                </Link>
-          {user ? (
-            <div className="flex items-center gap-4">
-              {/* ✅ শুধু user এর জন্য cart icon */}
-          
-         
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-            >
-              Login
+          {/* Cart icon desktop */}
+          {user && role === "user" && (
+            <Link to="/cart" className="text-gray-700 hover:text-blue-600">
+              <BsCart4 size={22} />
             </Link>
+          )}
+
+          {/* Login / Signup / Logout */}
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+            >
+              Logout
+            </button>
+          ) : (
+            <div className="flex gap-2">
+              <Link
+                to="/login"
+                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+              >
+                Sign Up
+              </Link>
+            </div>
           )}
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-2">
+          {/* Mobile Cart icon */}
+          {user && role === "user" && (
+            <Link to="/cart" className="text-gray-700 hover:text-blue-600">
+              <BsCart4 size={22} />
+            </Link>
+          )}
+
           <button onClick={() => setIsOpen(!isOpen)}>
             <svg
               className="h-6 w-6 text-gray-700"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
             >
               {isOpen ? (
                 <path
@@ -144,35 +156,32 @@ const Navbar = () => {
           ))}
 
           {user ? (
-            <div className="space-y-2">
-              {/* ✅ Mobile Cart Icon শুধু user এর জন্য */}
-              {role === "user" && (
-                <Link
-                  to="/cart"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
-                >
-                  <BsCart4 size={22} />
-                </Link>
-              )}
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="block bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 mt-2"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="block bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 mt-2"
-              onClick={() => setIsOpen(false)}
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="block w-full bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700 mt-2"
             >
-              Login
-            </Link>
+              Logout
+            </button>
+          ) : (
+            <div className="flex flex-col gap-2 mt-2">
+              <Link
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className="block w-full bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                onClick={() => setIsOpen(false)}
+                className="block w-full bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+              >
+                Sign Up
+              </Link>
+            </div>
           )}
         </div>
       )}

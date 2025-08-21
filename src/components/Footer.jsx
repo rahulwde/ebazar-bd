@@ -4,8 +4,8 @@ import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-8">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between">
+    <footer className="w-full bg-gray-900 text-gray-300 py-8">
+      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between">
         
         {/* Logo & Name */}
         <Link
@@ -65,7 +65,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Text */}
-      <div className="mt-6 border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
+      <div className="mt-6 border-t border-gray-700 pt-4 text-center text-sm text-gray-500 w-full">
         © {new Date().getFullYear()} Digital Bazar BD. All Rights Reserved.
       </div>
     </footer>

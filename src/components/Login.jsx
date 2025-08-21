@@ -1,11 +1,12 @@
-import React, {  use, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Lottie from 'lottie-react';
 import loginAnimation from '../assets/Login Leady.json';
 import { Link, useLocation, useNavigate } from 'react-router';
+ import { FcGoogle } from "react-icons/fc"; // Google Icon
 import { AuthContext } from '../Context/Authcontext';
- 
+
 const Login = () => {
-  const { signIn } =use(AuthContext); // Firebase login বা custom login function
+  const { signIn, googleSignIn } = useContext(AuthContext); // googleSignIn add করতে হবে context এ
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login = () => {
   // PrivateRoute থেকে আগের page path
   const from = location.state?.from?.pathname || '/';
 
+  // Email/Password Login
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -22,6 +24,17 @@ const Login = () => {
     } catch (err) {
       console.error('Login failed:', err);
       alert('❌ Login failed!');
+    }
+  };
+
+  // Google Login
+  const handleGoogleLogin = async () => {
+    try {
+      await googleSignIn(); // Firebase Google login function
+      navigate(from, { replace: true });
+    } catch (err) {
+      console.error('Google login failed:', err);
+      alert('❌ Google login failed!');
     }
   };
 
@@ -81,6 +94,22 @@ const Login = () => {
               Login
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center justify-center my-4">
+            <span className="w-1/5 border-b border-gray-300"></span>
+            <span className="mx-2 text-gray-500 text-sm">OR</span>
+            <span className="w-1/5 border-b border-gray-300"></span>
+          </div>
+
+          {/* Google Login Button */}
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 py-3 rounded-lg hover:bg-gray-200 transition duration-200"
+          >
+            <FcGoogle size={22} /> 
+            <span className="font-medium text-gray-700">Continue with Google</span>
+          </button>
 
           <p className="text-center text-sm text-gray-600">
             Don’t have an account?
