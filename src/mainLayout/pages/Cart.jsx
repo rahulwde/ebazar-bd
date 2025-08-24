@@ -23,7 +23,9 @@ export default function Cart() {
   // ✅ Fetch cart items
   useEffect(() => {
     axios
-      .get(`https://ecommerce-backend-fdas.vercel.app/cart/guest/${guestId}`)
+      .get(
+        `https://ecommerce-backend-one-omega.vercel.app/cart/guest/${guestId}`
+      )
       .then((res) => setCartItems(res.data))
       .catch((err) => console.error("Error fetching cart:", err));
   }, [guestId]);
@@ -45,7 +47,9 @@ export default function Cart() {
   // ✅ Update quantity in backend
   const updateQuantity = (id, quantity) => {
     axios
-      .put(`https://ecommerce-backend-fdas.vercel.app/cart/${id}`, { quantity })
+      .put(`https://ecommerce-backend-one-omega.vercel.app/cart/${id}`, {
+        quantity,
+      })
       .then(() => {
         setCartItems((items) =>
           items.map((i) => (i._id === id ? { ...i, quantity } : i))
@@ -67,7 +71,7 @@ export default function Cart() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`https://ecommerce-backend-fdas.vercel.app/cart/${id}`)
+          .delete(`https://ecommerce-backend-one-omega.vercel.app/cart/${id}`)
           .then(() => {
             setCartItems((items) => items.filter((i) => i._id !== id));
             Swal.fire("Removed!", "Item has been removed.", "success");
@@ -105,7 +109,7 @@ export default function Cart() {
 
   return (
     <div className="max-w-lg mx-auto p-4">
-      <h2 className="text-xl font-semibold mb-4 text-center">🛒 My Cart</h2>
+      <h2 className="text-xl font-semibold my-4 text-center">🛒 My Cart</h2>
 
       {cartItems.length === 0 ? (
         <p className="text-center text-gray-600">Your cart is empty.</p>

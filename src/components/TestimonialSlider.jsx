@@ -6,7 +6,7 @@ const testimonials = [
     id: 1,
     product: "Mini Fan",
     name: "মোঃ রাশেদুল ইসলাম",
-    image: "/src/assets/client1.jpg",
+    image: "https://i.ibb.co.com/s9pjNKTZ/client1.jpg",
     review:
       "Mini Fanটি খুবই কার্যকর। গরমে ব্যবহার করা একদম উপযুক্ত। দামও সাশ্রয়ী।",
     rating: 5,
@@ -15,7 +15,7 @@ const testimonials = [
     id: 2,
     product: "Table Lamp",
     name: "সুমাইয়া খান",
-    image: "/src/assets/client2.jpg",
+    image: "https://i.ibb.co.com/twBZJkgZ/client2.jpg",
     review:
       "Table Lampটি আমার স্টাডি টেবিলে খুব ভালো দেখাচ্ছে। আলো পর্যাপ্ত এবং চোখে চাপ কম।",
     rating: 4,
@@ -24,7 +24,7 @@ const testimonials = [
     id: 3,
     product: "Headphone",
     name: "আরিফুল ইসলাম",
-    image: "/src/assets/client3.jpg",
+    image: "https://i.ibb.co.com/23hSFfdq/client3.jpg",
     review:
       "Headphoneটির সাউন্ড কোয়ালিটি অসাধারণ। বাজেট অনুযায়ী পারফেক্ট।",
     rating: 5,
@@ -33,7 +33,7 @@ const testimonials = [
     id: 4,
     product: "Airpod",
     name: "নাজমুল হাসান",
-    image: "/src/assets/client4.jpg",
+    image: "https://i.ibb.co.com/zhqXX8H0/client4.jpg",
     review:
       "Airpod খুব আরামদায়ক এবং কান-এ ভালো ফিট হয়। ব্যাটারি সময়ও ভালো।",
     rating: 5,
@@ -42,7 +42,7 @@ const testimonials = [
     id: 5,
     product: "Neckband",
     name: "ফারহানা সুলতানা",
-    image: "/src/assets/client5.jpg",
+    image: "https://i.ibb.co.com/1tQmGky3/client5.jpg",
     review:
       "Neckbandটি হালকা ও আরামদায়ক। ব্যাটারি লাইফ দীর্ঘ এবং সাউন্ড ক্লিয়ার।",
     rating: 4,
@@ -52,7 +52,7 @@ const testimonials = [
     id: 6,
     product: "Digital Clock",
     name: "রিফাত হোসেন",
-    image: "/src/assets/client6.jpg",
+    image: "https://i.ibb.co.com/C3Zc5VBg/client6.jpg",
     review: "Digital Clockটি অত্যন্ত কার্যকর। সময় দেখানো সহজ এবং ডিজাইন সুন্দর।",
     rating: 5,
   },
@@ -60,7 +60,7 @@ const testimonials = [
     id: 7,
     product: "Birthday Gift",
     name: "সাবিনা পারভীন",
-    image: "/src/assets/client7.jpg",
+    image: "https://i.ibb.co.com/MxQtrBzY/client7.jpg",
     review: "Birthday Giftটি খুবই সুন্দর এবং উপহার দেওয়ার জন্য পারফেক্ট।",
     rating: 5,
   },

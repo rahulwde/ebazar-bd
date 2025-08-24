@@ -4,6 +4,9 @@ import { BsCart4 } from "react-icons/bs";
 import { AuthContext } from "../Context/Authcontext";
 import useUserRole from "../hooks/useUserRole";
 import Loader from "../mainLayout/pages/Loader";
+import {  BsHouseDoor, BsBoxSeam } from "react-icons/bs";
+import { FaClipboardList, FaPlusCircle, FaShoppingBag } from "react-icons/fa";
+import { FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,18 +24,22 @@ const Navbar = () => {
   };
 
   const navLinks =
-    role === "admin"
-      ? [
-          { path: "/", name: "Home" },
-          { path: "/products", name: "Products" },
-          { path: "/create", name: "Create" },
-          { path: "/all-orders", name: "All Orders" },
-        ]
-      : [
-          { path: "/", name: "Home" },
-          { path: "/products", name: "Products" },
-          ...(user && role === "user" ? [{ path: "/my-order", name: "My Order" }] : []),
-        ];
+  role === "admin"
+    ? [
+        { path: "/", name: "Home", icon: <BsHouseDoor size={18} /> },
+        { path: "/products", name: "Products", icon: <BsBoxSeam size={18} /> },
+        { path: "/create", name: "Create", icon: <FaPlusCircle size={18} /> },
+        { path: "/all-orders", name: "All Orders", icon: <FaClipboardList size={18} /> },
+        { path: "/my-products", name: "My Products", icon: <FaShoppingBag size={18} /> },
+      ]
+    : [
+        { path: "/", name: "Home", icon: <BsHouseDoor size={18} /> },
+        { path: "/products", name: "Products", icon: <BsBoxSeam size={18} /> },
+        ...(user && role === "user"
+          ? [{ path: "/my-order", name: "My Order", icon: <FaClipboardList size={18} /> }]
+          : []),
+      ];
+
 
   return (
     <nav className="shadow-md sticky top-0 z-50 bg-white">
@@ -56,59 +63,55 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-4">
           {navLinks.map((link) => (
             <NavLink
-              key={link.path}
-              to={link.path}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-blue-600 font-semibold"
-                  : "text-gray-700 hover:text-blue-500"
-              }
-            >
-              {link.name}
-            </NavLink>
+  key={link.path}
+  to={link.path}
+  className={({ isActive }) =>
+    isActive
+      ? "flex items-center gap-2 text-blue-600 font-semibold"
+      : "flex items-center gap-2 text-gray-700 hover:text-blue-500"
+  }
+>
+  {link.icon}
+  <span>{link.name}</span>
+</NavLink>
+
           ))}
 
-          {/* Cart icon desktop */}
-          {user && role === "user" && (
-            <Link to="/cart" className="text-gray-700 hover:text-blue-600">
-              <BsCart4 size={22} />
-            </Link>
-          )}
+        
 
           {/* Login / Signup / Logout */}
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
-          ) : (
-            <div className="flex gap-2">
-              <Link
-                to="/login"
-                className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
-              >
-                Sign Up
-              </Link>
-            </div>
-          )}
+  <button
+    onClick={handleLogout}
+    className="flex items-center gap-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+  >
+    <FaSignOutAlt size={18} />
+    Logout
+  </button>
+) : (
+  <div className="flex gap-2">
+    <Link
+      to="/login"
+      className="flex items-center gap-2 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+    >
+      <FaSignInAlt size={18} />
+      Login
+    </Link>
+    <Link
+      to="/signup"
+      className="flex items-center gap-2 bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+    >
+      <FaUserPlus size={18} />
+      Sign Up
+    </Link>
+  </div>
+)}
+
         </div>
 
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center gap-2">
-          {/* Mobile Cart icon */}
-          {user && role === "user" && (
-            <Link to="/cart" className="text-gray-700 hover:text-blue-600">
-              <BsCart4 size={22} />
-            </Link>
-          )}
+           
 
           <button onClick={() => setIsOpen(!isOpen)}>
             <svg

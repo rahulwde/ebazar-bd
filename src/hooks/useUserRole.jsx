@@ -13,7 +13,7 @@ export default function useUserRole() {
       if (user?.email) {
         try {
           const res = await axios.get(
-            `https://ecommerce-backend-fdas.vercel.app/users/${user.email}`
+            `https://ecommerce-backend-one-omega.vercel.app/users/${user.email}`
           );
           setRole(res.data.role || "user"); // default 'user' দিলে undefined problem gone
         } catch (error) {

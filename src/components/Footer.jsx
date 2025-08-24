@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gray-900 text-gray-300 py-8">
+    <footer className="w-full py-8">
       <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center md:justify-between">
         
         {/* Logo & Name */}
@@ -14,7 +14,7 @@ const Footer = () => {
         >
           <BsCart4 size={28} />
           <div className="leading-5 text-left font-bold text-[18px]">
-            <span className="text-white">Digital</span>
+            <span className="text-black">Digital</span>
             <br />
             <span>
               Bazar <span className="text-[#00aa55]">BD</span>
@@ -59,7 +59,7 @@ const Footer = () => {
           {/* Address */}
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <FaMapMarkerAlt size={16} className="text-red-500" />
-            <span>Shankarpur, Guthia 8200, Barishal</span>
+            <span>Barishal, Bangladesh</span>
           </div>
         </div>
       </div>

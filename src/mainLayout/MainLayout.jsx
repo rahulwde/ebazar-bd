@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import WhatsAppButton from './pages/WhatsAppButton';
 import ScrollToTop from './ScrollToTop';
 import Loader from './pages/Loader';
+import FloatingCartIcon from '../components/FloatingCartIcon';
 
 const MainLayout = () => {
     const [loading , setLoading]= useState(true)
@@ -26,9 +27,10 @@ const MainLayout = () => {
       </div>
 
       {/* Main content */}
-      <main className="min-h-screen">
+      <main className="min-h-screen ">
         <Outlet />
       </main>
+      <FloatingCartIcon></FloatingCartIcon>
  <WhatsAppButton />
       <ScrollToTop />
       {/* Footer fixed at bottom */}

@@ -19,6 +19,9 @@ import PrivateRoute from './mainLayout/pages/PrivateRoute.jsx';
 import OrderSummary from './mainLayout/pages/OrderSummary.jsx';
 import MyOrders from './mainLayout/pages/MyOrders.jsx';
 import AllOrders from './mainLayout/pages/AllOrders.jsx';
+import MyProducts from './components/MyProducts.jsx';
+import UpdateProduct from './components/UpdateProduct.jsx';
+import MyInvoices from './components/MyInvoices.jsx';
     const router = createBrowserRouter([
   {
     path: "/",
@@ -38,6 +41,14 @@ import AllOrders from './mainLayout/pages/AllOrders.jsx';
       {
         path:"create",
         element:<CreateProductForm></CreateProductForm>
+      },
+      {
+         path:"my-products",
+         element:<MyProducts></MyProducts>
+      },
+      {
+         path:"update-product/:id",
+         element:<UpdateProduct></UpdateProduct>
       },
       {
         path:"products",
@@ -62,6 +73,10 @@ import AllOrders from './mainLayout/pages/AllOrders.jsx';
     {
       path:"all-orders",
       element:<AllOrders></AllOrders>
+    },
+    {
+      path:"invoice",
+      element:<MyInvoices></MyInvoices>
     }
     
     ]

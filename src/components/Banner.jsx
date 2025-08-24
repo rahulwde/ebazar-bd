@@ -3,21 +3,17 @@ import { useEffect, useState } from "react";
 const banners = [
   {
     id: 1,
-    title: "Welcome to Event Explorer",
-    subtitle: "Discover local events near you",
-    image: "/src/assets/banners1.jpg",
+
+    image: "https://i.ibb.co.com/dwXMtgfV/banners1.jpg",
   },
   {
     id: 2,
-    title: "Join Amazing Workshops",
-    subtitle: "Learn and grow with experts",
-    image: "/src/assets/banner2.jpg",
+
+    image: "https://i.ibb.co.com/YTLSXZFb/banner2.jpg",
   },
   {
     id: 3,
-    title: "Explore Fun Activities",
-    subtitle: "Find events that match your interest",
-    image: "/src/assets/banners3.jpg",
+    image: "https://i.ibb.co.com/994TkgKG/banners3.jpg",
   },
 ];
 

@@ -4,9 +4,11 @@ import loginAnimation from '../assets/Login Leady.json';
 import { Link, useLocation, useNavigate } from 'react-router';
  import { FcGoogle } from "react-icons/fc"; // Google Icon
 import { AuthContext } from '../Context/Authcontext';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Login = () => {
-  const { signIn, googleSignIn } = useContext(AuthContext); // googleSignIn add করতে হবে context এ
+  const { signIn, googleSignIn,setUser } = useContext(AuthContext); // googleSignIn add করতে হবে context এ
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -26,17 +28,44 @@ const Login = () => {
       alert('❌ Login failed!');
     }
   };
+    const saveUserToDB = async (user) => {
+      const newUser = {
+        name: user.displayName || "No Name",
+        email: user.email,
+        role: "user", // default role
+      };
+      try {
+        await axios.post("https://ecommerce-backend-one-omega.vercel.app/users", newUser);
+      } catch (error) {
+        console.error("Error saving user:", error.message);
+      }
+    };
 
   // Google Login
-  const handleGoogleLogin = async () => {
-    try {
-      await googleSignIn(); // Firebase Google login function
-      navigate(from, { replace: true });
-    } catch (err) {
-      console.error('Google login failed:', err);
-      alert('❌ Google login failed!');
-    }
-  };
+   const handleGoogleLogin = async () => {
+     try {
+       const result = await googleSignIn();
+       setUser(result.user);
+ 
+       // ✅ DB তে পাঠানো
+       await saveUserToDB(result.user);
+ 
+       Swal.fire({
+         icon: "success",
+         title: "Login Successful!",
+         text: `Welcome, ${result.user.displayName || "User"}!`,
+         timer: 2000,
+         showConfirmButton: false,
+       });
+       navigate("/");
+     } catch (error) {
+       Swal.fire({
+         icon: "error",
+         title: "Google Login Failed",
+         text: error.message,
+       });
+     }
+   };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">

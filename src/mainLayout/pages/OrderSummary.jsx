@@ -71,43 +71,66 @@ export default function OrderSummary() {
       Swal.fire("❌ Error", "Failed to upload image", "error");
     }
   };
+const handleConfirmOrder = async () => {
+  if (!formData.paymentProof && !formData.transactionId) return;
 
-  const handleConfirmOrder = async () => {
-    if (!formData.paymentProof && !formData.transactionId) return;
+  try {
+    // 1️⃣ Post order first
+    const orderPayload = {
+      ...order,
+      customer: {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+      },
+      advancePayment: formData.advancePayment,
+      paymentProof: formData.paymentProof,
+      transactionId: formData.transactionId,
+      status: "pending",
+    };
 
-    try {
-      const orderPayload = {
-        ...order,
-        customer: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-        },
-        advancePayment: formData.advancePayment,
-        paymentProof: formData.paymentProof,
-        transactionId: formData.transactionId,
-        status: "pending",
-      };
+    const orderRes = await axios.post(
+      "https://ecommerce-backend-one-omega.vercel.app/orders",
+      orderPayload
+    );
 
-      const res = await axios.post(
-        "https://ecommerce-backend-fdas.vercel.app/orders",
-        orderPayload
-      );
+    const savedOrder = orderRes.data;
 
-      if (res.status === 201) {
-        Swal.fire(
-          "✅ Order Confirmed",
-          `Your order is placed. Advance payment: ৳${formData.advancePayment}`,
-          "success"
-        );
-        navigate("/");
-      }
-    } catch (err) {
-      console.error(err);
-      Swal.fire("❌ Error", "Failed to confirm order", "error");
-    }
-  };
+    // 2️⃣ Post invoice automatically
+   const invoicePayload = {
+  orderId: savedOrder._id,
+  userEmail: formData.email,
+  items: savedOrder.items.map(item => ({
+    productName: item.productName,  // include product name explicitly
+    price: item.price,
+    quantity: item.quantity,
+    total: item.price * item.quantity
+  })),
+  totalAmount: savedOrder.totalPrice,
+  customer: orderPayload.customer,
+};
+
+    console.log(invoicePayload)
+
+    await axios.post(
+      "https://ecommerce-backend-one-omega.vercel.app/invoices",
+      invoicePayload
+    );
+
+    Swal.fire(
+      "✅ Order & Invoice Generated",
+      `Your order is placed. Advance payment: ৳${formData.advancePayment}`,
+      "success"
+    );
+
+    navigate("/"); // redirect after success
+  } catch (err) {
+    console.error(err);
+    Swal.fire("❌ Error", "Failed to confirm order or generate invoice", "error");
+  }
+};
+
 
   const isSubmitDisabled = !formData.paymentProof && !formData.transactionId;
 

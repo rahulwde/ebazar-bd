@@ -20,7 +20,7 @@ export default function AllOrders() {
   const fetchOrders = async () => {
     try {
       const res = await axios.get(
-        "https://ecommerce-backend-fdas.vercel.app/orders/all"
+        "https://ecommerce-backend-one-omega.vercel.app/orders/all"
       );
       setOrders(res.data);
       setLoading(false);
@@ -38,7 +38,7 @@ export default function AllOrders() {
   const handleApprove = async (orderId) => {
     try {
       const res = await axios.put(
-        `https://ecommerce-backend-fdas.vercel.app/orders/${orderId}`,
+        `https://ecommerce-backend-one-omega.vercel.app/orders/${orderId}`,
         {
           status: "approved",
         }
@@ -72,7 +72,7 @@ export default function AllOrders() {
       if (result.isConfirmed) {
         try {
           const res = await axios.delete(
-            `https://ecommerce-backend-fdas.vercel.app/orders/${orderId}`
+            `https://ecommerce-backend-one-omega.vercel.app/orders/${orderId}`
           );
           if (res.status === 200) {
             setOrders((prev) => prev.filter((o) => o._id !== orderId));
